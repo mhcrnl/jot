@@ -1,0 +1,274 @@
+This README is part of the jot text editor installation.
+  
+1 Installation - general.
+-------------------------
+  The contents of the jot_v1.8.1.zip or jot_v1.8.1.tz archives is identical, these
+  are available from the JoyOfText project at sourceforge.net
+    
+  The directory structure is as follows:
+   
+                      vn.m                                  
+                       |                                    
+    ---------------------------------------------------------------
+   |      |      |                  |            |      |          |
+  bin    coms   releasenote.txt    resources    source  test.csh   test.bat
+   |
+   |
+   --------------
+   |      |      |
+   lin64  lin32  win  
+  
+    - the bin area, contains shell scripts and the jot binaries for various OS
+      and processor architectures, it is also where  scripts  expect  to  find
+      java applications.
+        - lin64 - 64-bit linux
+        - lin32 - 32-bit linux
+        - win   - 32-bit windows, for 64-bit windows the win version will  run
+          in compatibility mode.
+    - coms is the area where jot expects to find it's command scripts.
+    - releasenote.txt briefly describes recent changes and any known bugs.
+    - resources contains various test and example files, this area can be used
+      to park reference files used by some jot scripts.
+    - source - holds the jot source files.
+  
+  If this is to be a shared installation, then each user will have to  set  up
+  their own resources area, the one supplied  in  the  tarball  contains  only
+  examples for testing and training.
+  
+  Users may prefer to recompile the source, see below, or  simply  unpack  the
+  tarball/zipfiles in a suitable location.
+
+2 Configuration
+---------------
+  Three env entries are required:
+  
+    - PATH - your search path has to include the jot executable
+   
+    - JOT_HOME - points to the top installation directory, jot expects to  see
+      the coms subdirectory at ${JOT_HOME}/coms/
+       
+    - JOT_RESOURCES - initially, this  might  point  to  ${JOT_HOME}/resources
+      i.e. the resources subdirectory unpacked from the tarball. For a  shared
+      installation, each user will probably require their own resources  below
+      their home area.
+      
+  In unixland, this will probably be done by  making  appropriate  entries  in
+  your main top .cshrc or  .bashrc  file.  For  windows,  this  requires  some
+  entries to be made in your registry.
+
+3 Unpacking and installation (unix)
+-----------------------------------
+  Download the tarball from sourceforge to, say, ~/Downloads
+  
+  Log in as root.
+$ mkdir /usr/lib/jot
+$ cd /usr/lib/jot
+$tar zxf jot_v1.8.1.tz 
+$ ln -s v1.8.1/bin/lin32/jot /usr/bin
+  
+  or, you may prefer to unpack jot in your home area
+$ cd ~
+$ mkdir jot
+$ cd jot
+$ tar zxf ~/Downloads/jot_v1.8.1.tz
+  Then set up the path - ~/jot/v1.8.1/bin/lin32
+
+3.1 Configuration - (csh & tcsh)
+--------------------------------
+  The editor must have the env JOT_HOME setup - typically this points  to  the
+  version subdirectory e.g:
+$ setenv JOT_HOME <path>/vn.m>
+  
+  Some  of  the  scripts  and  training  material  expect  to  see   the   env
+  JOT_RESOURCES set up typically this might  be  in  the  users  home  area  -
+  something like this, maybe:
+$ mkdir ~/jot_resources
+$ cp -pR ${JOT_HOME}/resources ~/jot_resources
+$ setenv JOT_RESOURCES ~/jot_resources
+  
+  The obvious way of getting jot onto the search path is to to add the jot bin
+  area to the search path:
+$ set path=(${JOT_HOME}/bin/linxx $path)
+  Alternatively, you may prefer to copy the executable  into  a  personal  bin
+  area.
+$ cp ${JOT_HOME}/bin/linxx/jot ~/bin
+
+3.2 Configuration (bourne korn and bash)
+----------------------------------------
+  The previous notes apply but the command syntax is different.
+   
+$ JOT_HOME=/<path>/vn.m 
+$ export JOT_HOME
+$ JOT_RESOURCES=~/jot_resources
+$ export JOT_RESOURCES
+$ PATH=$JOT_HOME/bin:$PATH
+
+4 Unpacking and installation (windows)
+--------------------------------------
+  Your browser has probably been set up to download and unpack the  .zip  file
+  in one operation. In sourceforge.org, search for JoyOfText and go  to  Files
+  page then click on the .zip archive.  Your  browser  should  offer  you  the
+  option of opening it in Windows explorer - select this option and click  OK.
+  Explorer will show the files at c:\Users\<yourLogin>\Local\Temp\jot_v1.8.1 -
+  it's not actually unpacked the archive at this point.
+  
+  In the "My Computer" explorer, browse down to
+    C:\Users\<yourLogin>\Local\Temp\jot_v1.8.1
+  click on v1.8.1 - then selects the tree:
+    Edit->Copy
+    
+  Now unpack the jot installation tree to  C:\"Program  Files"  by  Pasting  -
+  first browse your way to C:\Program Files, then create the new jot folder:
+    Right Click -> New->Folder
+  Change the name to jot, descend into the  new  jot  folder  and  unpack  the
+  zipfile here.
+    Organize->Paste
+
+4.1 Configuration (Windows)
+---------------------------
+  As a quick fix just to test the editor, this will do, in a windows  "Command
+  Prompt" console:
+$ setx JOT_HOME <path>/<vn.m>
+$ setx JOT_RESOURCES <wherever>
+$ set path %path%;%JOT_HOME%
+  
+  This setup will only work for the current session, to set it up  permanently
+  you need to set up the path and environment variables in the registry - this
+  is done with regedit. First log in as the administrator.
+    Start->Switch User
+  Select the administrator login.
+  
+  Fire up regedit
+   Start->regedit
+  The registry editor has great power for both  good  and  ill.  Mistakes  are
+  easily made but mistakes in the registry can be painful -  it  is  suggested
+  that you take a backup snapshot of the registry before touching anything:
+    File->Export then type in the file name Backup_<todaysDate>
+  In the event of anything going wrong you can restore the original  setup  by
+  selecting Import on the same menu.
+  
+  Set the path for jot:
+    open Computer->HKEY_LOCAL_MACHINE->SOFTWARE->Microsoft->Windows->CurrentVersion->App Paths
+  Right-click and select New->Key
+  Enter jot as the key name, set the key value to
+    c:\Program Files\jot\v1.8.1\bin\win
+  Exit regedit  
+    File->Exit
+  
+  Now switch user back to yourself to set up the jot environment variables.  
+    Start->regedit
+  Edit your personal environment-variable setup
+    Computer->HKEY_CURRENT_USER->Environment
+  Right click ->New->Key
+    change the New_Key name to jot_home
+  then Right Click -> New->String Value
+  and enter installation path e.g: C:\Program Files\jot\jot_v1.8.1
+  
+  Similarly for JOT_RESOURCES - in  this case the string value should be 
+    c:\Users\<yourLogin>\Program Files\jot_resources
+    
+  Exit  regedit
+    File->Exit
+  Next create the directory  c:\Users\<yourLogin>\Program  Files\jot_resources
+  in the "My computer" explorer browse down to c:\Users\<yourLogin>\
+    RightClick->New->Folder
+  change the name to jot_resources  then  copy  the  resources  subtree  here.
+  Browse to c:\Program Files\jot\resources
+    RightClick->Copy
+  now go back to c:\Users\<yourLogin>\Program Files\jot_resources and copy the
+  resources subtree here
+
+5 Additional Apps
+-----------------
+  Several of the jot scripts use basic unix utilities  like  uname,  ls,  date
+  etc. these are assumed to be on your search  path  -  true  for  most  linux
+  installations but not for most windows.
+   
+  In particular, The get.jot script also uses xls2csv and the apache tika apps
+  to process some classes of binary documents. It  assumes  the  existence  of
+  basic unix utilities like ls and tar on  your  search  path.  In  a  windows
+  system these are  available  from  the  UnxUtils  sourceforge  project.  The
+  tika-app jar must be in the ${JOT_HOME}/bin area.
+   
+    - The files required to make xls2csv utility can be  downloaded  from  the
+      libxls project at www.sourceforge.org
+       
+    - The tika-app jar can be downloaded from www.apache.org
+     
+    - For windows users, the  UnxUtils  executables  can  be  downloaded  from
+      UnxUtils sourceforge project - see www.sourceforge.org
+
+6 Testing
+---------
+  Initially test that it fires up OK and can find it's resources directory:
+$ jot ${JOT_RESOURCES}/Richard_III_Entire_Play.txt
+  Exit with %a
+  
+  The principal test file is test.jot - in ${JOT_HOME}/coms, in either windows
+  or linux, run it thus:
+$ jot ${JOT_RESOURCES}/t.t -in="%r=test"
+  This checks all primitive commands. On completion the screen should  display
+  the message:
+    "All tests completed successfully"
+    
+  The jot command %a exits the editor.
+> %a
+  
+  Other important tests are written in OS-specific CLI scripts.
+
+6.1 Testing (linux)
+-------------------
+  The test.csh  c-shell  script  checks  the  various  command-line  modes  of
+  operation:
+   
+$ ./test.csh
+ 
+  It reports a summary of failed tests on completion.
+
+6.2 Testing (Windows)
+---------------------
+  There is a test.bat script that is roughly equivalent to the  unix  test.csh
+  script:
+$ test
+ 
+  It reports a summary of failed tests on completion.
+
+7 Compilation
+-------------
+7.1 Compilation (Linux/Unix)
+----------------------------
+  Compilation in a gnu environment: 
+$ csh
+$ cd $JOT_HOME
+$ set versionString='"'"jot <version>,
+$ gcc -g source/jot.c -D VERSION_STRING="${versionString}" -lncursesw -o jot |& tee jot.lis
+  
+  Expect no warnings or errors.
+
+7.2 Compilation (windows/cygwin)
+--------------------------------
+  This seems to work OK, a major restriction is  that  many  of  the  keyboard
+  buttons are indistinguishable - this can probably be fixed by  moving  to  a
+  newer curses library.
+  
+  This works from a cygwin terminal: 
+$ csh
+$ cd $JOT_HOME
+$ set versionString='"'"`basename ${PWD}` jot, built `\date +%d/%m/%y\ %H:%M:%S;, for \uname -nspr`"'"'
+$ cc -c -g source/jot.c -D VersionString="${versionString}"
+$ cc -g -Wall -O0 jot.o -lncurses
+
+7.3 Compilation: MS-Windows
+----------------------------
+  The original was compiled using MSVC 2010 (the express version) under  wine,
+  using both MS and  gnu  libs.  To  compile  locally  you  will  require  the
+  following:
+    - a libgw32c-0.4 installation (from the sourceforge gnuwin32 project).
+    - With VC express 2010 I built with the following commands: 
+$ cd $JOT_HOME
+$ set versionString="jot <version>, built <buildDateStamp>, for WindowsNT"
+$ cl /c /DVC /D__value=_value /Zi /D_DEBUG /DVERSION_STRING="jot <version>, <hostInfo>, <dateStamp>" source/jot.c
+$ link /debug /out:jot.exe jot.obj wine/libgw32c-0.4/lib/libgw32c.a wine/MSDKs/v7.1/Lib/*.Lib wine/lib/libgcc.lib
+ 
+  
+   
